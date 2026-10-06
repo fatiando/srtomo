@@ -1,6 +1,6 @@
 <h1 align="center">SrTomo</h1>
 
-<p align="center"><strong>Straight-ray traveltime tomography for teaching inverse problems</strong></p>
+<p align="center"><strong>Straight-ray travel time tomography for teaching inverse problems</strong></p>
 
 <p align="center">
 <a href="https://www.fatiando.org/srtomo"><strong>Documentation</strong> (latest)</a> •
