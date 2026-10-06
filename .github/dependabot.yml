@@ -1,0 +1,22 @@
+version: 2
+updates:
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pip"
+    directory: "env/"
+    schedule:
+      interval: "weekly"
+    allow:
+      - dependency-name: "zizmor"
+        update-types:
+          - "version-update:semver-minor"
+      - dependency-name: "ruff"
+        update-types:
+          - "version-update:semver-minor"
+      - dependency-name: "burocrata"
+        update-types:
+          - "version-update:semver-minor"
