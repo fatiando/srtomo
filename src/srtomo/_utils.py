@@ -28,6 +28,6 @@ def plot_ray_paths(sources, receivers, **kwargs):
     if "linestyle" not in kwargs:
         kwargs["linestyle"] = "-"
     if "color" not in kwargs:
-        kwargs["color"] = "-"
+        kwargs["color"] = "k"
     for p1, p2 in zip(np.transpose(sources), np.transpose(receivers), strict=True):
         plt.plot([p1[0], p2[0]], [p1[1], p2[1]], **kwargs)
