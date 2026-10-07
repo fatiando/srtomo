@@ -8,6 +8,8 @@
 These are the functions and classes that make up the SrTomo API.
 """
 
+from ._jacobian import jacobian
+from ._utils import pair, plot_ray_paths
 from ._version import __version__
 
 # Append a leading "v" to the generated version by setuptools_scm
