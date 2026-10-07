@@ -12,7 +12,6 @@ import numba
 import numpy as np
 
 
-@numba.jit(nopython=True)
 def jacobian(sources, receivers, grid):
     """
     Calculate the Jacobian matrix of the tomography.
