@@ -3,17 +3,18 @@ PROJECT=srtomo
 CHECK_STYLE=src/$(PROJECT) doc test
 GITHUB_ACTIONS=.github/workflows
 
-.PHONY: help build install test format check check-format check-style check-actions clean
+.PHONY: help build install test baseline format check check-format check-style check-actions clean
 
 help:
 	@echo "Commands:"
 	@echo ""
-	@echo "  install   install in editable mode"
-	@echo "  test      run the test suite (including doctests) and report coverage"
-	@echo "  format    automatically format the code"
-	@echo "  check     run code style and quality checks"
-	@echo "  build     build source and wheel distributions"
-	@echo "  clean     clean up build and generated files"
+	@echo "  install  install in editable mode"
+	@echo "  test     run the test suite (including doctests) and report coverage"
+	@echo "  make     generate baseline images for plotting tests"
+	@echo "  format   automatically format the code"
+	@echo "  check    run code style and quality checks"
+	@echo "  build    build source and wheel distributions"
+	@echo "  clean    clean up build and generated files"
 	@echo ""
 
 build:
@@ -24,6 +25,9 @@ install:
 
 test:
 	pytest --cov-report=term-missing --cov --doctest-modules --verbose test src/$(PROJECT)
+
+baseline:
+	pytest --mpl-generate-path=baseline
 
 format:
 	ruff check --select I --fix $(CHECK_STYLE) # fix isort errors

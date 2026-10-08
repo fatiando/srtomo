@@ -18,6 +18,7 @@ dependencies:
   # Test
   - pytest
   - pytest-cov
+  - pytest-mpl
   - coverage
   # Documentation
   - sphinx==7.2.*
