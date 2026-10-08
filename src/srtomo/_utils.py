@@ -10,11 +10,15 @@ General utilities for the tomography.
 
 import numpy as np
 
+from ._validation import to_arrays
+
 
 def pair(sources, receivers):
     """
     Pair every source with every receiver.
     """
+    sources = to_arrays(sources, ravel=True)
+    receivers = to_arrays(receivers, ravel=True)
     xs, xr = [i.ravel() for i in np.meshgrid(sources[0], receivers[0])]
     ys, yr = [i.ravel() for i in np.meshgrid(sources[1], receivers[1])]
     return (xs, ys), (xr, yr)
