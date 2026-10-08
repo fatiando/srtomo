@@ -11,11 +11,16 @@ Build the Jacobian matrix of the inversion.
 import numba
 import numpy as np
 
+from ._validation import to_arrays
+
 
 def jacobian(sources, receivers, grid):
     """
     Calculate the Jacobian matrix of the tomography.
     """
+    sources = to_arrays(sources, ravel=True)
+    receivers = to_arrays(receivers, ravel=True)
+    grid = to_arrays(grid)
     n_data = sources[0].size
     shape = grid[0].shape
     n_params = shape[0] * shape[1]
@@ -74,12 +79,9 @@ def jacobian(sources, receivers, grid):
                 # Find out how many points are inside both the cell and the
                 # rectangle with the ray path as a diagonal. Also remove the
                 # duplicates
-                crossings = _cross(
+                crossings = _cross_jit(
                     xps, yps, intercept, x1, x2, y1, y2, minx, maxx, miny, maxy, cross
                 )
-                if crossings > 2:
-                    message = "Too many crossings"
-                    raise ValueError(message)
                 if crossings == 2:
                     distance = np.sqrt(
                         (cross[1, 0] - cross[0, 0]) ** 2
@@ -89,7 +91,6 @@ def jacobian(sources, receivers, grid):
     return jacobian
 
 
-@numba.jit(nopython=True)
 def _cross(xps, yps, intercept, x1, x2, y1, y2, minx, maxx, miny, maxy, cross):
     """
     Find the crossings of the ray and cell boundaries.
@@ -106,10 +107,10 @@ def _cross(xps, yps, intercept, x1, x2, y1, y2, minx, maxx, miny, maxy, cross):
             and yps[i] <= maxy
             and yps[i] >= miny
         ):
-            duplicate = 0
+            duplicate = False
             for j in range(k):
                 if cross[j, 0] == xps[i] and cross[j, 1] == yps[i]:
-                    duplicate = 1
+                    duplicate = True
                     break
             if duplicate:
                 continue
@@ -117,3 +118,6 @@ def _cross(xps, yps, intercept, x1, x2, y1, y2, minx, maxx, miny, maxy, cross):
             cross[k, 1] = yps[i]
             k += 1
     return k
+
+
+_cross_jit = numba.jit(_cross, nopython=True, inline="always")
