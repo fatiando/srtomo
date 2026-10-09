@@ -24,18 +24,29 @@ def jacobian(sources, receivers, grid):
     n_data = sources[0].size
     shape = grid[0].shape
     n_params = shape[0] * shape[1]
+    jacobian = np.zeros((n_data, n_params), dtype="float")
+    _jacobian(sources[0], sources[1], receivers[0], receivers[1], grid[0], grid[1], jacobian)
+    return jacobian
+
+
+@numba.jit(nopython=True)
+def _jacobian(src_x, src_y, rec_x, rec_y, grd_x, grd_y, jacobian):
+    """
+    Calculate the Jacobian matrix of the tomography.
+    """
+    n_data = src_x.size
+    shape = grd_x.shape
     xps = np.empty(6, dtype="float")
     yps = np.empty(6, dtype="float")
     cross = np.empty((6, 2), dtype="float")
-    jacobian = np.zeros((n_data, n_params), dtype="float")
-    cell_size = grid[0][0, 1] - grid[0][0, 0]
+    cell_size = grd_x[0, 1] - grd_x[0, 0]
     for i in range(n_data):
-        xs, ys = sources[0][i], sources[1][i]
-        xr, yr = receivers[0][i], receivers[1][i]
+        xs, ys = src_x[i], src_y[i]
+        xr, yr = rec_x[i], rec_y[i]
         for l in range(shape[1]):
-            x = grid[0][0, l]
+            x = grd_x[0, l]
             for m in range(shape[0]):
-                y = grid[1][m, 0]
+                y = grd_y[m, 0]
                 x1, x2 = x - cell_size / 2, x + cell_size / 2
                 y1, y2 = y - cell_size / 2, y + cell_size / 2
                 maxx = max(xs, xr)
@@ -79,7 +90,7 @@ def jacobian(sources, receivers, grid):
                 # Find out how many points are inside both the cell and the
                 # rectangle with the ray path as a diagonal. Also remove the
                 # duplicates
-                crossings = _cross_jit(
+                crossings = _cross(
                     xps, yps, intercept, x1, x2, y1, y2, minx, maxx, miny, maxy, cross
                 )
                 if crossings == 2:
@@ -88,9 +99,9 @@ def jacobian(sources, receivers, grid):
                         + (cross[1, 1] - cross[0, 1]) ** 2
                     )
                     jacobian[i, m * shape[1] + l] = distance
-    return jacobian
 
 
+@numba.jit(nopython=True, inline="always")
 def _cross(xps, yps, intercept, x1, x2, y1, y2, minx, maxx, miny, maxy, cross):
     """
     Find the crossings of the ray and cell boundaries.
@@ -112,12 +123,10 @@ def _cross(xps, yps, intercept, x1, x2, y1, y2, minx, maxx, miny, maxy, cross):
                 if cross[j, 0] == xps[i] and cross[j, 1] == yps[i]:
                     duplicate = True
                     break
-            if duplicate:
-                continue
-            cross[k, 0] = xps[i]
-            cross[k, 1] = yps[i]
-            k += 1
+            if not duplicate:
+                cross[k, 0] = xps[i]
+                cross[k, 1] = yps[i]
+                k += 1
     return k
 
 
-_cross_jit = numba.jit(_cross, nopython=True, inline="always")
