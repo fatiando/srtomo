@@ -21,7 +21,7 @@ project.
 <a href="https://pypi.python.org/pypi/srtomo"><img src="http://img.shields.io/pypi/v/srtomo.svg?style=flat-square" alt="Latest version on PyPI"></a>
 <a href="https://github.com/conda-forge/srtomo-feedstock"><img src="https://img.shields.io/conda/vn/conda-forge/srtomo.svg?style=flat-square" alt="Latest version on conda-forge"></a>
 <a href="https://pypi.python.org/pypi/srtomo"><img src="https://img.shields.io/pypi/pyversions/srtomo.svg?style=flat-square" alt="Compatible Python versions."></a>
-<a href="https://doi.org/10.5281/zenodo.15051755"><img src="https://img.shields.io/badge/doi-10.5281%2Fzenodo.15051755-blue?style=flat-square" alt="DOI used to cite SrTomo"></a>
+<a href="https://doi.org/10.5281/zenodo.23245432"><img src="https://img.shields.io/badge/doi-10.5281%2Fzenodo.23245432-blue?style=flat-square" alt="DOI used to cite SrTomo"></a>
 </p>
 
 ## About
