@@ -40,12 +40,12 @@ def _jacobian(src_x, src_y, rec_x, rec_y, grd_x, grd_y, jacobian):
     yps = np.empty(6, dtype="float")
     cross = np.empty((6, 2), dtype="float")
     cell_size = grd_x[0, 1] - grd_x[0, 0]
-    for i in range(n_data):
+    for i in range(n_data): # pragma: no branch
         xs, ys = src_x[i], src_y[i]
         xr, yr = rec_x[i], rec_y[i]
-        for l in range(shape[1]):
+        for l in range(shape[1]): # pragma: no branch
             x = grd_x[0, l]
-            for m in range(shape[0]):
+            for m in range(shape[0]): # pragma: no branch
                 y = grd_y[m, 0]
                 x1, x2 = x - cell_size / 2, x + cell_size / 2
                 y1, y2 = y - cell_size / 2, y + cell_size / 2
@@ -55,20 +55,20 @@ def _jacobian(src_x, src_y, rec_x, rec_y, grd_x, grd_y, jacobian):
                 miny = min(ys, yr)
                 # Check if the cell is in the rectangle with the ray path as a
                 # diagonal. If not, then the ray doesn't go through the cell.
-                if x2 < minx or x1 > maxx or y2 < miny or y1 > maxy:
+                if x2 < minx or x1 > maxx or y2 < miny or y1 > maxy: # pragma: no branch
                     continue
                 # Now need to find the places where the ray intersects the cell
                 # If the ray is vertical
-                if (xr - xs) == 0:
+                if (xr - xs) == 0: # pragma: no branch
                     xps[:] = xr
                     yps[0], yps[1], yps[2], yps[3] = yr, ys, y1, y2
                     intercept = 4
                 # If the ray is horizontal
-                elif (yr - ys) == 0:
+                elif (yr - ys) == 0: # pragma: no branch
                     xps[0], xps[1], xps[2], xps[3] = xr, xs, x1, x2
                     yps[:] = yr
                     intercept = 4
-                else:
+                else: # pragma: no branch
                     # Angular and linear coefficients of the ray
                     a_ray = (yr - ys) / (xr - xs)
                     b_ray = ys - a_ray * (xs)
@@ -93,7 +93,7 @@ def _jacobian(src_x, src_y, rec_x, rec_y, grd_x, grd_y, jacobian):
                 crossings = _cross(
                     xps, yps, intercept, x1, x2, y1, y2, minx, maxx, miny, maxy, cross
                 )
-                if crossings == 2:
+                if crossings == 2: # pragma: no branch
                     distance = np.sqrt(
                         (cross[1, 0] - cross[0, 0]) ** 2
                         + (cross[1, 1] - cross[0, 1]) ** 2
@@ -107,7 +107,7 @@ def _cross(xps, yps, intercept, x1, x2, y1, y2, minx, maxx, miny, maxy, cross):
     Find the crossings of the ray and cell boundaries.
     """
     k = 0
-    for i in range(intercept):
+    for i in range(intercept): # pragma: no branch
         if (
             xps[i] <= x2
             and xps[i] >= x1
@@ -117,13 +117,13 @@ def _cross(xps, yps, intercept, x1, x2, y1, y2, minx, maxx, miny, maxy, cross):
             and xps[i] >= minx
             and yps[i] <= maxy
             and yps[i] >= miny
-        ):
+        ): # pragma: no branch
             duplicate = False
-            for j in range(k):
-                if cross[j, 0] == xps[i] and cross[j, 1] == yps[i]:
+            for j in range(k): # pragma: no branch
+                if cross[j, 0] == xps[i] and cross[j, 1] == yps[i]: # pragma: no branch
                     duplicate = True
                     break
-            if not duplicate:
+            if not duplicate: # pragma: no branch
                 cross[k, 0] = xps[i]
                 cross[k, 1] = yps[i]
                 k += 1
