@@ -10,9 +10,8 @@ Test that Jacobian matrix calculations are correct.
 
 import numpy as np
 import numpy.testing as npt
-import pytest
 
-from srtomo._jacobian import _cross, _cross_jit, jacobian
+from srtomo._jacobian import _cross, jacobian
 
 
 def test_jacobian_simple():
@@ -39,8 +38,23 @@ def test_jacobian_simple():
     npt.assert_allclose(G, expected)
 
 
-@pytest.mark.parametrize("cross_func", [_cross, _cross_jit], ids=["regular", "jit"])
-def test_crossings_vertical(cross_func):
+def test_jacobian_empty():
+    "Test the Jacobian using a simple model"
+    sources = ([], [])
+    receivers = (
+        [1, 2, 0, 2, 0.5],
+        [1, 1, 2, 1.5, 0],
+    )
+    grid = (
+        [[0.5, 1.5], [0.5, 1.5]],
+        [[0.5, 0.5], [1.5, 1.5]],
+    )
+    G = jacobian(([], []), ([], []), grid)
+    npt.assert_allclose(G, np.zeros((0, 4)))
+
+
+
+def test_crossings_vertical():
     "Check that finding vertical crossings works"
     x1, x2, y1, y2 = 0, 1, 0, 2
     xsrc, ysrc = 0.5, 0
@@ -48,14 +62,13 @@ def test_crossings_vertical(cross_func):
     xps = np.array([xsrc, xsrc, xsrc, xsrc])
     yps = np.array([yrec, ysrc, y1, y2])
     cross = np.zeros((6, 2), dtype="float")
-    k = cross_func(xps, yps, 4, x1, x2, y1, y2, xrec, xrec, ysrc, yrec, cross)
+    k = _cross(xps, yps, 4, x1, x2, y1, y2, xrec, xrec, ysrc, yrec, cross)
     assert k == 2, f"Number of crossings was {k} instead of 2"
     expected = np.array([[xrec, yrec], [xsrc, ysrc], [0, 0], [0, 0], [0, 0], [0, 0]])
     npt.assert_allclose(cross, expected)
 
 
-@pytest.mark.parametrize("cross_func", [_cross, _cross_jit], ids=["regular", "jit"])
-def test_crossings_diagonal(cross_func):
+def test_crossings_diagonal():
     "Check that finding diagonal crossings works"
     x1, x2, y1, y2 = 0, 1, 0, 2
     xsrc, ysrc = 0, 0
@@ -63,14 +76,13 @@ def test_crossings_diagonal(cross_func):
     xps = np.array([x1, x2, xsrc, xrec, xsrc, xrec])
     yps = np.array([ysrc, yrec, y1, y2, ysrc, yrec])
     cross = np.zeros((6, 2), dtype="float")
-    k = cross_func(xps, yps, 6, x1, x2, y1, y2, xsrc, xrec, ysrc, yrec, cross)
+    k = _cross(xps, yps, 6, x1, x2, y1, y2, xsrc, xrec, ysrc, yrec, cross)
     assert k == 2, f"Number of crossings was {k} instead of 2"
     expected = np.array([[xsrc, ysrc], [xrec, yrec], [0, 0], [0, 0], [0, 0], [0, 0]])
     npt.assert_allclose(cross, expected)
 
 
-@pytest.mark.parametrize("cross_func", [_cross, _cross_jit], ids=["regular", "jit"])
-def test_crossings_off_diagonal(cross_func):
+def test_crossings_off_diagonal():
     "Check that finding crossings works for a general case"
     x1, x2, y1, y2 = 0, 1, 0, 2
     xsrc, ysrc = 0, -1
@@ -78,7 +90,19 @@ def test_crossings_off_diagonal(cross_func):
     xps = np.array([x1, x2, 0.5, 1, xsrc, xrec])
     yps = np.array([-1, 1, y1, y2, ysrc, yrec])
     cross = np.zeros((6, 2), dtype="float")
-    k = cross_func(xps, yps, 6, x1, x2, y1, y2, xsrc, xrec, ysrc, yrec, cross)
+    k = _cross(xps, yps, 6, x1, x2, y1, y2, xsrc, xrec, ysrc, yrec, cross)
     assert k == 2, f"Number of crossings was {k} instead of 2"
     expected = np.array([[xrec, yrec], [0.5, 0], [0, 0], [0, 0], [0, 0], [0, 0]])
     npt.assert_allclose(cross, expected)
+
+
+def test_crossings_skip_no_crossings():
+    ""
+    x1, x2, y1, y2 = 0, 1, 0, 2
+    xsrc, ysrc = 0, -1
+    xrec, yrec = 1, 1
+    xps = np.array([x1, x2, 0.5, 1, xsrc, xrec])
+    yps = np.array([-1, 1, y1, y2, ysrc, yrec])
+    cross = np.zeros((6, 2), dtype="float")
+    k = _cross(xps, yps, 0, x1, x2, y1, y2, xsrc, xrec, ysrc, yrec, cross)
+    assert k == 0, f"Number of crossings was {k} instead of 2"
