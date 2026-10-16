@@ -40,18 +40,12 @@ def test_jacobian_simple():
 
 def test_jacobian_empty():
     "Test the Jacobian using a simple model"
-    sources = ([], [])
-    receivers = (
-        [1, 2, 0, 2, 0.5],
-        [1, 1, 2, 1.5, 0],
-    )
     grid = (
         [[0.5, 1.5], [0.5, 1.5]],
         [[0.5, 0.5], [1.5, 1.5]],
     )
     G = jacobian(([], []), ([], []), grid)
     npt.assert_allclose(G, np.zeros((0, 4)))
-
 
 
 def test_crossings_vertical():
