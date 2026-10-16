@@ -24,7 +24,7 @@ install:
 	python -m pip install --no-deps --editable .
 
 test:
-	pytest --cov-report=term-missing --cov --doctest-modules --verbose test src/$(PROJECT)
+	NUMBA_JIT_COVERAGE=1 pytest
 
 baseline:
 	pytest --mpl-generate-path=baseline
