@@ -10,4 +10,6 @@ List of functions and classes (API)
 .. autosummary::
     :toctree: generated/
 
-
+    jacobian
+    pair
+    plot_ray_paths

@@ -178,7 +178,12 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference Documentation</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="api/index.html">List of functions and classes (API)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/index.html">List of functions and classes (API)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/srtomo.jacobian.html">srtomo.jacobian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/srtomo.pair.html">srtomo.pair</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/srtomo.plot_ray_paths.html">srtomo.plot_ray_paths</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="citing.html">Citing SrTomo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Changelog</a></li>
@@ -382,7 +387,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -398,6 +405,15 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-0-2">Version 0.0.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-0-1">Version 0.0.1</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -409,6 +425,19 @@ document.write(`
                   
   <section id="changelog">
 <span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
+<section id="version-0-0-2">
+<h2>Version 0.0.2<a class="headerlink" href="#version-0-0-2" title="Link to this heading">#</a></h2>
+<p>Released on: 2026/10/07</p>
+<p>doi: <a class="reference external" href="https://doi.org/10.5281/zenodo.23245591">https://doi.org/10.5281/zenodo.23245591</a></p>
+<p>Small bug fixes to the prototype code based on class feedback but still no
+tests.</p>
+</section>
+<section id="version-0-0-1">
+<h2>Version 0.0.1<a class="headerlink" href="#version-0-0-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2026/10/07</p>
+<p>doi: <a class="reference external" href="https://doi.org/10.5281/zenodo.23245433">https://doi.org/10.5281/zenodo.23245433</a></p>
+<p>Initial release of SrTomo with some untested prototype code.</p>
+</section>
 </section>
 
 
@@ -447,6 +476,22 @@ document.write(`
             
             
               
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-0-2">Version 0.0.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-0-1">Version 0.0.1</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
             
           </div>
           <footer class="bd-footer-content">
@@ -471,7 +516,7 @@ document.write(`
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Oct 07, 2026.
+  Last updated on Oct 16, 2026.
   <br/>
 </p>
   </div>
